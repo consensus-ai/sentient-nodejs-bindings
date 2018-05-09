@@ -29,6 +29,8 @@ You can specify a local path for this library in the importing `package.json` fi
 
 Just make sure not to commit this change as it will break for other users and in CI.
 
+You must run `npm install` before using this library.
+
 ## Example Usage
 
 ```js
