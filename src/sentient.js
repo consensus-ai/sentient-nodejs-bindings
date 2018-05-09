@@ -13,7 +13,7 @@ const agent = new http.Agent({
 })
 
 // sia.js error constants
-export const errCouldNotConnect = new Error('could not connect to the Sia daemon')
+export const errCouldNotConnect = new Error('could not connect to the sentient-network daemon')
 
 // Siacoin -> hastings unit conversion functions
 // These make conversion between units of Sia easy and consistent for developers.

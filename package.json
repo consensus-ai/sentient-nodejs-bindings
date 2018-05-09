@@ -1,33 +1,30 @@
 {
-  "name": "sia.js",
+  "name": "sentient.js",
   "version": "0.0.1",
-  "description": "Node wrapper for siad of the Sia network",
+  "description": "Node wrapper for the sentient-network API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NebulousLabs/Nodejs-Sia.git"
+    "url": "git+https://github.com/consensus-ai/nodejs-sentient.git"
   },
-  "main": "lib/sia.js",
+  "main": "lib/sentient.js",
   "scripts": {
     "build": "babel -d lib/ src/",
     "test": "npm run lint && mocha --compilers js:babel-register --recursive ./test",
     "prepublish": "npm run build",
     "lint": "eslint --max-warnings 0 ./src ./test",
-    "kill": "killall siad; while pgrep siad; do sleep .5; done;",
-    "clean": "npm run kill && rm -rf Sia node_modules"
+    "clean": "rm -rf node_modules"
   },
   "keywords": [
-    "Sia",
-    "Sia-UI",
+    "sentient-network",
+    "sentient-ui",
     "Decentralized",
-    "Cloud",
-    "Storage",
     "Altcoin",
     "Cryptocurrency"
   ],
   "bugs": {
-    "url": "https://github.com/NebulousLabs/Nodejs-Sia/issues"
+    "url": "https://github.com/consensus-ai/nodejs-sentient/issues"
   },
-  "author": "Nebulous Labs",
+  "author": "Consensus AI",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.10.1",
