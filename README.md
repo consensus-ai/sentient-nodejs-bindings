@@ -1,17 +1,9 @@
-# [![Sia Logo](http://sia.tech/img/svg/sia-green-logo.svg)](http://sia.tech/) Nodejs Wrapper
-
-[![Build Status](https://travis-ci.org/NebulousLabs/Nodejs-Sia.svg?branch=master)](https://travis-ci.org/NebulousLabs/Nodejs-Sia)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-[![devDependency Status](https://david-dm.org/NebulousLabs/Nodejs-Sia/dev-status.svg)](https://david-dm.org/NebulousLabs/Nodejs-Sia#info=devDependencies)
-[![dependencies Status](https://david-dm.org/NebulousLabs/Nodejs-Sia.svg)](https://david-dm.org/NebulousLabs/Nodejs-Sia#info=dependencies)
-[![license:mit](https://img.shields.io/badge/license-mit-blue.svg)](https://opensource.org/licenses/MIT)
-
-# A Highly Efficient Decentralized Storage Network
-
 This is a [Nodejs](https://nodejs.org/) wrapper for
-[Sia](https://github.com/NebulousLabs/Sia). Use it in your apps to easily
-interact with the Sia storage network via function calls instead of manual http
+[sentient-network](https://github.com/consensus-ai/sentient-network). Use it in your apps to easily
+interact with the sentient-netowrk via function calls instead of manual http
 requests.
+
+It was originally forked from [Sia](https://github.com/NebulousLabs/Sia)'s [Nodejs-Sia](https://github.com/NebulousLabs/Nodejs-Sia) library.
 
 ## Prerequisites
 
@@ -22,6 +14,20 @@ requests.
 ```
 npm install sia.js
 ```
+
+## Local Development
+You can specify a local path for this library in the importing `package.json` file like so:
+```js
+{
+  // ...
+  "dependencies": {
+    // ...
+    "sia.js": "file:../nodejs-sentient"
+  }
+}
+```
+
+Just make sure not to commit this change as it will break for other users and in CI.
 
 ## Example Usage
 
