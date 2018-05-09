@@ -150,7 +150,6 @@ describe('sia.js wrapper library', () => {
 			it('starts siad with sane defaults if no flags are passed', () => {
 				const expectedFlags = [
 					'--api-addr=localhost:9980',
-					'--host-addr=:9982',
 					'--rpc-addr=:9981',
 				]
 				launch('testpath')

@@ -67,7 +67,6 @@ const call = (address, opts) => new Promise((resolve, reject) => {
 const launch = (path, settings) => {
 	const defaultSettings = {
 		'api-addr': 'localhost:9980',
-		'host-addr': ':9982',
 		'rpc-addr': ':9981',
 		'authenticate-api': false,
 		'disable-api-security': false,
