@@ -12,7 +12,7 @@ It was originally forked from [Sia](https://github.com/NebulousLabs/Sia)'s [Node
 ## Installation
 
 ```
-npm install sia.js
+npm install sentient.js
 ```
 
 ## Local Development
@@ -22,7 +22,7 @@ You can specify a local path for this library in the importing `package.json` fi
   // ...
   "dependencies": {
     // ...
-    "sia.js": "file:../nodejs-sentient"
+    "sentient.js": "file:../nodejs-sentient"
   }
 }
 ```
@@ -34,13 +34,13 @@ You must run `npm install` before using this library.
 ## Example Usage
 
 ```js
-import { connect } from 'sia.js'
+import { connect } from 'sentient.js'
 
 // Using promises...
 // connect to an already running Sia daemon on localhost:9980 and print its version
 connect('localhost:9980')
-  .then((siad) => {
-    siad.call('/daemon/version').then((version) => console.log(version))
+  .then((sentientd) => {
+    sentientd.call('/daemon/version').then((version) => console.log(version))
   })
   .catch((err) => {
     console.error(err)
@@ -49,9 +49,9 @@ connect('localhost:9980')
 // Or ES7 async/await
 async function getVersion() {
   try {
-    const siad = await connect('localhost:9980')
-    const version = await siad.call('/daemon/version')
-    console.log('Siad has version: ' + version)
+    const sentientd = await connect('localhost:9980')
+    const version = await sentientd.call('/daemon/version')
+    console.log('Sentientd has version: ' + version)
   } catch (e) {
     console.error(e)
   }
@@ -61,7 +61,7 @@ async function getVersion() {
 You can also forgo using `connect` and use `call` directly by providing an API address as the first parameter:
 
 ```js
-import { call } from 'sia.js'
+import { call } from 'sentient.js'
 
 async function getVersion(address) {
   try {
@@ -75,22 +75,22 @@ async function getVersion(address) {
 console.log(getVersion('10.0.0.1:9980'))
 ```
 
-`sia.js` can also launch a siad instance given a path on disk to the `siad` binary.  `launch` takes an object defining the flags to use as its second argument, and returns the `child_process` object.  You are responsible for keeping track of the state of this `child_process` object, and catching any errors `launch` may throw.
+`sentient.js` can also launch a sentientd instance given a path on disk to the `sentientd` binary.  `launch` takes an object defining the flags to use as its second argument, and returns the `child_process` object.  You are responsible for keeping track of the state of this `child_process` object, and catching any errors `launch` may throw.
 
 ```js
-import { launch } from 'sia.js'
+import { launch } from 'sentient.js'
 
 try {
   // Flags are passed in as an object in the second argument to `launch`.
   // if no flags are passed, the default flags will be used.
-  const siadProcess = launch('/path/to/your/siad', {
+  const sentientdProcess = launch('/path/to/your/sentientd', {
     'modules': 'cghmrtw',
     'profile': true,
   })
-  // siadProcess is a ChildProcess class.  See https://nodejs.org/api/child_process.html#child_process_class_childprocess for more information on what you can do with it.
-  siadProcess.on('error', (err) => console.log('siad encountered an error ' + err))
+  // sentientdProcess is a ChildProcess class.  See https://nodejs.org/api/child_process.html#child_process_class_childprocess for more information on what you can do with it.
+  sentientdProcess.on('error', (err) => console.log('sentientd encountered an error ' + err))
 } catch (e) {
-  console.error('error launching siad: ' + e.toString())
+  console.error('error launching sentientd: ' + e.toString())
 }
 ```
 
@@ -101,7 +101,7 @@ see how to access the full functionality of [Sia's
 API](https://github.com/NebulousLabs/Sia/blob/master/doc/API.md)
 
 ```js
-Siad.call({
+Sentientd.call({
   url: '/consensus/block',
   method: 'GET',
   qs: {

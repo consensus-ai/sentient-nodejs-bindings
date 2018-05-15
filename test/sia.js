@@ -2,7 +2,7 @@
 import 'babel-polyfill'
 import BigNumber from 'bignumber.js'
 import Path from 'path'
-import { agent, senToHastings, call, hastingsToSen, isRunning, connect, errCouldNotConnect } from '../src/sia.js'
+import { agent, senToHastings, call, hastingsToSen, isRunning, connect, errCouldNotConnect } from '../src/sentient.js'
 import http from 'http'
 import readdir from 'readdir'
 import { expect } from 'chai'
@@ -11,7 +11,7 @@ import { spy, stub } from 'sinon'
 import nock from 'nock'
 import fs from 'fs'
 
-// Mock the process calls required for testing Siad launch functionality.
+// Mock the process calls required for testing Sentientd launch functionality.
 const mockProcessObject = {
 	stdout: {
 		pipe: spy(),
@@ -25,13 +25,13 @@ const mock = {
 		spawn: stub().returns(mockProcessObject),
 	},
 }
-const { launch, makeRequest } = proxyquire('../src/sia.js', mock)
+const { launch, makeRequest } = proxyquire('../src/sentient.js', mock)
 
 BigNumber.config({DECIMAL_PLACES: 28})
 
 const hastingsPerSen = new BigNumber('1000000000000000000000000')
 
-describe('sia.js wrapper library', () => {
+describe('sentient.js wrapper library', () => {
 	describe('unit conversion functions', () => {
 		it('converts from sen to hastings correctly', () => {
 			const maxSC = new BigNumber('100000000000000000000000')
@@ -61,16 +61,16 @@ describe('sia.js wrapper library', () => {
 			expect(convertedSen.toString()).to.equal(originalSen.toString())
 		})
 	})
-	describe('siad interaction functions', () => {
+	describe('sentientd interaction functions', () => {
 		describe('isRunning', () => {
-			it('returns true when siad is running', async() => {
+			it('returns true when sentientd is running', async() => {
 				nock('http://localhost:9980')
 				  .get('/gateway')
 				  .reply(200, 'success')
 				const running = await isRunning('localhost:9980')
 				expect(running).to.be.true
 			})
-			it('returns false when siad is not running', async() => {
+			it('returns false when sentientd is not running', async() => {
 				nock('http://localhost:9980')
 				  .get('/gateway')
 				  .replyWithError('error')
@@ -79,7 +79,7 @@ describe('sia.js wrapper library', () => {
 			})
 		})
 		describe('connect', () => {
-			it('throws an error if siad is unreachable', async() => {
+			it('throws an error if sentientd is unreachable', async() => {
 				nock('http://localhost:9980')
 				  .get('/gateway')
 				  .replyWithError('test-error')
@@ -95,21 +95,21 @@ describe('sia.js wrapper library', () => {
 				expect(err).to.equal(errCouldNotConnect)
 			})
 
-			let siad
-			it('returns a valid siad object if sia is reachable', async() => {
+			let sentientd
+			it('returns a valid sentientd object if sia is reachable', async() => {
 				nock('http://localhost:9980')
 				  .get('/gateway')
 				  .reply(200, 'success')
-				siad = await connect('localhost:9980')
-				expect(siad).to.have.property('call')
-				expect(siad).to.have.property('isRunning')
+				sentientd = await connect('localhost:9980')
+				expect(sentientd).to.have.property('call')
+				expect(sentientd).to.have.property('isRunning')
 			})
-			it('can make api calls using siad.call', async() => {
+			it('can make api calls using sentientd.call', async() => {
 				nock('http://localhost:9980')
 				  .get('/gateway')
 				  .reply(200, 'success')
 
-				const gateway = await siad.call('/gateway')
+				const gateway = await sentientd.call('/gateway')
 				expect(gateway).to.equal('success')
 			})
 		})
@@ -147,7 +147,7 @@ describe('sia.js wrapper library', () => {
 				mockProcessObject.stdout.pipe.reset()
 				mockProcessObject.stderr.pipe.reset()
 			})
-			it('starts siad with sane defaults if no flags are passed', () => {
+			it('starts sentientd with sane defaults if no flags are passed', () => {
 				const expectedFlags = [
 					'--api-addr=localhost:9980',
 					'--rpc-addr=:9981',
@@ -156,7 +156,7 @@ describe('sia.js wrapper library', () => {
 				expect(mock['child_process'].spawn.called).to.be.true
 				expect(mock['child_process'].spawn.getCall(0).args[1]).to.deep.equal(expectedFlags)
 			})
-			it('starts siad with --sia-directory given sia-directory', () => {
+			it('starts sentientd with --sia-directory given sia-directory', () => {
 				const testSettings = {
 					'sia-directory': 'testdir',
 				}
@@ -180,7 +180,7 @@ describe('sia.js wrapper library', () => {
 				expect(flags.indexOf('--testflag=true') !== -1).to.be.true
 				expect(flags.indexOf('--testflag=false') !== -1).to.be.false
 			})
-			it('starts siad with the same pid as the calling process', () => {
+			it('starts sentientd with the same pid as the calling process', () => {
 				launch('testpath')
 				if (process.geteuid) {
 					expect(mock['child_process'].spawn.getCall(0).args[2].uid).to.equal(process.geteuid())
@@ -188,11 +188,11 @@ describe('sia.js wrapper library', () => {
 			})
 			it('pipes output to file correctly given no sia-dir', () => {
 				launch('testpath')
-				expect(mockProcessObject.stdout.pipe.calledWith(fs.createWriteStream('siad-output.log')))
+				expect(mockProcessObject.stdout.pipe.calledWith(fs.createWriteStream('sentientd-output.log')))
 			})
 			it('pipes output to file correctly given a sia-dir', () => {
 				launch('testpath', { 'sia-directory': 'testdir' })
-				expect(mockProcessObject.stdout.pipe.calledWith(fs.createWriteStream(Path.join('testdir', 'siad-output.log'))))
+				expect(mockProcessObject.stdout.pipe.calledWith(fs.createWriteStream(Path.join('testdir', 'sentientd-output.log'))))
 			})
 		})
 		describe('call', () => {

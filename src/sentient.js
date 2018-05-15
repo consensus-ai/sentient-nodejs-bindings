@@ -1,5 +1,5 @@
-// sia.js: a lightweight node wrapper for starting, and communicating with
-// a Sia daemon (siad).
+// sentient.js: a lightweight node wrapper for starting, and communicating with
+// a Sia daemon (sentientd).
 import BigNumber from 'bignumber.js'
 import fs from 'fs'
 import { spawn } from 'child_process'
@@ -12,7 +12,7 @@ const agent = new http.Agent({
 	maxSockets: 20,
 })
 
-// sia.js error constants
+// sentient.js error constants
 export const errCouldNotConnect = new Error('could not connect to the sentient-network daemon')
 
 // Sen -> hastings unit conversion functions
@@ -61,7 +61,7 @@ const call = (address, opts) => new Promise((resolve, reject) => {
 	})
 })
 
-// launch launches a new instance of siad using the flags defined by `settings`.
+// launch launches a new instance of sentientd using the flags defined by `settings`.
 // this function can `throw`, callers should catch errors.
 // callers should also handle the lifecycle of the spawned process.
 const launch = (path, settings) => {
@@ -76,26 +76,26 @@ const launch = (path, settings) => {
 	const mapFlags = (key) => '--' + key + '=' + mergedSettings[key]
 	const flags = Object.keys(mergedSettings).filter(filterFlags).map(mapFlags)
 
-	const siadOutput = (() => {
+	const sentientdOutput = (() => {
 		if (typeof mergedSettings['sia-directory'] !== 'undefined') {
-			return fs.createWriteStream(Path.join(mergedSettings['sia-directory'], 'siad-output.log'))
+			return fs.createWriteStream(Path.join(mergedSettings['sia-directory'], 'sentientd-output.log'))
 		}
-		return fs.createWriteStream('siad-output.log')
+		return fs.createWriteStream('sentientd-output.log')
 	})()
 
 	const opts = { }
 	if (process.geteuid) {
 		opts.uid = process.geteuid()
 	}
-	const siadProcess = spawn(path, flags, opts)
-	siadProcess.stdout.pipe(siadOutput)
-	siadProcess.stderr.pipe(siadOutput)
-	return siadProcess
+	const sentientdProcess = spawn(path, flags, opts)
+	sentientdProcess.stdout.pipe(sentientdOutput)
+	sentientdProcess.stderr.pipe(sentientdOutput)
+	return sentientdProcess
 }
 
 // isRunning returns true if a successful call can be to /gateway
 // using the address provided in `address`.  Note that this call does not check
-// whether the siad process is still running, it only checks if a Sia API is
+// whether the sentientd process is still running, it only checks if a Sia API is
 // reachable.
 async function isRunning(address) {
 	try {
@@ -109,22 +109,22 @@ async function isRunning(address) {
 	}
 }
 
-// siadWrapper returns an instance of a Siad API configured with address.
-const siadWrapper = (address) => {
-	const siadAddress = address
+// sentientdWrapper returns an instance of a Sentientd API configured with address.
+const sentientdWrapper = (address) => {
+	const sentientdAddress = address
 	return {
-		call: (options)  => call(siadAddress, options),
-		isRunning: () => isRunning(siadAddress),
+		call: (options)  => call(sentientdAddress, options),
+		isRunning: () => isRunning(sentientdAddress),
 	}
 }
 
-// connect connects to a running Siad at `address` and returns a siadWrapper object.
+// connect connects to a running Sentientd at `address` and returns a sentientdWrapper object.
 async function connect(address) {
 	const running = await isRunning(address)
 	if (!running) {
 		throw errCouldNotConnect
 	}
-	return siadWrapper(address)
+	return sentientdWrapper(address)
 }
 
 export {
