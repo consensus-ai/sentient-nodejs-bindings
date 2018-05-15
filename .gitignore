@@ -3,6 +3,8 @@ node_modules
 npm-debug.log
 .test
 lib
+testdir
+sentientd-output.log
 
 # Vim
 *.swp
