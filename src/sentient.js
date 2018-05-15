@@ -1,5 +1,5 @@
 // sentient.js: a lightweight node wrapper for starting, and communicating with
-// a Sia daemon (sentientd).
+// a Sen daemon (sentientd).
 import BigNumber from 'bignumber.js'
 import fs from 'fs'
 import { spawn } from 'child_process'
@@ -16,7 +16,7 @@ const agent = new http.Agent({
 export const errCouldNotConnect = new Error('could not connect to the sentient-network daemon')
 
 // Sen -> hastings unit conversion functions
-// These make conversion between units of Sia easy and consistent for developers.
+// These make conversion between units of Sen easy and consistent for developers.
 // Never return exponentials from BigNumber.toString, since they confuse the API
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 BigNumber.config({ DECIMAL_PLACES: 30 })
@@ -38,14 +38,14 @@ export const makeRequest = (address, opts) => {
 		callOptions.timeout = 10000
 	}
 	callOptions.headers = {
-		'User-Agent': 'Sia-Agent',
+		'User-Agent': 'Sentient-Agent',
 	}
 	callOptions.pool = agent
 
 	return callOptions
 }
 
-// Call makes a call to the Sia API at `address`, with the request options defined by `opts`.
+// Call makes a call to the Sen API at `address`, with the request options defined by `opts`.
 // returns a promise which resolves with the response if the request completes successfully
 // and rejects with the error if the request fails.
 const call = (address, opts) => new Promise((resolve, reject) => {
@@ -77,8 +77,8 @@ const launch = (path, settings) => {
 	const flags = Object.keys(mergedSettings).filter(filterFlags).map(mapFlags)
 
 	const sentientdOutput = (() => {
-		if (typeof mergedSettings['sia-directory'] !== 'undefined') {
-			return fs.createWriteStream(Path.join(mergedSettings['sia-directory'], 'sentientd-output.log'))
+		if (typeof mergedSettings['sen-directory'] !== 'undefined') {
+			return fs.createWriteStream(Path.join(mergedSettings['sen-directory'], 'sentientd-output.log'))
 		}
 		return fs.createWriteStream('sentientd-output.log')
 	})()
@@ -95,7 +95,7 @@ const launch = (path, settings) => {
 
 // isRunning returns true if a successful call can be to /gateway
 // using the address provided in `address`.  Note that this call does not check
-// whether the sentientd process is still running, it only checks if a Sia API is
+// whether the sentientd process is still running, it only checks if a Sen API is
 // reachable.
 async function isRunning(address) {
 	try {

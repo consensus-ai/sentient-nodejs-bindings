@@ -96,7 +96,7 @@ describe('sentient.js wrapper library', () => {
 			})
 
 			let sentientd
-			it('returns a valid sentientd object if sia is reachable', async() => {
+			it('returns a valid sentientd object if sen is reachable', async() => {
 				nock('http://localhost:9980')
 				  .get('/gateway')
 				  .reply(200, 'success')
@@ -120,7 +120,7 @@ describe('sentient.js wrapper library', () => {
 					json: true,
 					timeout: 10000,
 					headers: {
-						'User-Agent': 'Sia-Agent',
+						'User-Agent': 'Sentient-Agent',
 					},
 				}
 				expect(makeRequest('localhost:9980', '/test')).to.contain.keys(expectedOpts)
@@ -133,7 +133,7 @@ describe('sentient.js wrapper library', () => {
 					url: 'http://localhost:9980/test',
 					qs: testparams,
 					headers: {
-						'User-Agent': 'Sia-Agent',
+						'User-Agent': 'Sentient-Agent',
 					},
 					timeout: 10000,
 					json: true,
@@ -156,9 +156,9 @@ describe('sentient.js wrapper library', () => {
 				expect(mock['child_process'].spawn.called).to.be.true
 				expect(mock['child_process'].spawn.getCall(0).args[1]).to.deep.equal(expectedFlags)
 			})
-			it('starts sentientd with --sia-directory given sia-directory', () => {
+			it('starts sentientd with --sen-directory given sen-directory', () => {
 				const testSettings = {
-					'sia-directory': 'testdir',
+					'sen-directory': 'testdir',
 				}
 				try {
 					fs.mkdirSync('./testdir')
@@ -171,7 +171,7 @@ describe('sentient.js wrapper library', () => {
 				expect(mock['child_process'].spawn.called).to.be.true
 				const flags = mock['child_process'].spawn.getCall(0).args[1]
 				const path = mock['child_process'].spawn.getCall(0).args[0]
-				expect(flags).to.contain('--sia-directory=testdir')
+				expect(flags).to.contain('--sen-directory=testdir')
 				expect(path).to.equal('testpath')
 			})
 			it('sets boolean flags correctly', () => {
@@ -186,12 +186,12 @@ describe('sentient.js wrapper library', () => {
 					expect(mock['child_process'].spawn.getCall(0).args[2].uid).to.equal(process.geteuid())
 				}
 			})
-			it('pipes output to file correctly given no sia-dir', () => {
+			it('pipes output to file correctly given no sen-dir', () => {
 				launch('testpath')
 				expect(mockProcessObject.stdout.pipe.calledWith(fs.createWriteStream('sentientd-output.log')))
 			})
-			it('pipes output to file correctly given a sia-dir', () => {
-				launch('testpath', { 'sia-directory': 'testdir' })
+			it('pipes output to file correctly given a sen-dir', () => {
+				launch('testpath', { 'sen-directory': 'testdir' })
 				expect(mockProcessObject.stdout.pipe.calledWith(fs.createWriteStream(Path.join('testdir', 'sentientd-output.log'))))
 			})
 		})
