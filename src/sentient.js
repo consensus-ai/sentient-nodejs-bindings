@@ -66,8 +66,8 @@ const call = (address, opts) => new Promise((resolve, reject) => {
 // callers should also handle the lifecycle of the spawned process.
 const launch = (path, settings) => {
 	const defaultSettings = {
-		'api-addr': 'localhost:9980',
-		'rpc-addr': ':9981',
+		'api-addr': 'localhost:9910',
+		'rpc-addr': ':9911',
 		'authenticate-api': false,
 		'disable-api-security': false,
 	}

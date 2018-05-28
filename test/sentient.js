@@ -64,29 +64,29 @@ describe('sentient.js wrapper library', () => {
 	describe('sentientd interaction functions', () => {
 		describe('isRunning', () => {
 			it('returns true when sentientd is running', async() => {
-				nock('http://localhost:9980')
+				nock('http://localhost:9910')
 				  .get('/gateway')
 				  .reply(200, 'success')
-				const running = await isRunning('localhost:9980')
+				const running = await isRunning('localhost:9910')
 				expect(running).to.be.true
 			})
 			it('returns false when sentientd is not running', async() => {
-				nock('http://localhost:9980')
+				nock('http://localhost:9910')
 				  .get('/gateway')
 				  .replyWithError('error')
-				const running = await isRunning('localhost:9980')
+				const running = await isRunning('localhost:9910')
 				expect(running).to.be.false
 			})
 		})
 		describe('connect', () => {
 			it('throws an error if sentientd is unreachable', async() => {
-				nock('http://localhost:9980')
+				nock('http://localhost:9910')
 				  .get('/gateway')
 				  .replyWithError('test-error')
 				let didThrow = false
 				let err
 				try {
-					await connect('localhost:9980')
+					await connect('localhost:9910')
 				} catch (e) {
 					didThrow = true
 					err = e
@@ -97,15 +97,15 @@ describe('sentient.js wrapper library', () => {
 
 			let sentientd
 			it('returns a valid sentientd object if sen is reachable', async() => {
-				nock('http://localhost:9980')
+				nock('http://localhost:9910')
 				  .get('/gateway')
 				  .reply(200, 'success')
-				sentientd = await connect('localhost:9980')
+				sentientd = await connect('localhost:9910')
 				expect(sentientd).to.have.property('call')
 				expect(sentientd).to.have.property('isRunning')
 			})
 			it('can make api calls using sentientd.call', async() => {
-				nock('http://localhost:9980')
+				nock('http://localhost:9910')
 				  .get('/gateway')
 				  .reply(200, 'success')
 
@@ -116,21 +116,21 @@ describe('sentient.js wrapper library', () => {
 		describe('makeRequest', () => {
 			it('constructs the correct request options given a string parameter', () => {
 				const expectedOpts = {
-					url: 'http://localhost:9980/test',
+					url: 'http://localhost:9910/test',
 					json: true,
 					timeout: 10000,
 					headers: {
 						'User-Agent': 'Sentient-Agent',
 					},
 				}
-				expect(makeRequest('localhost:9980', '/test')).to.contain.keys(expectedOpts)
+				expect(makeRequest('localhost:9910', '/test')).to.contain.keys(expectedOpts)
 			})
 			it('constructs the correct request options given an object parameter', () => {
 				const testparams = {
 					test: 'test',
 				}
 				const expectedOpts = {
-					url: 'http://localhost:9980/test',
+					url: 'http://localhost:9910/test',
 					qs: testparams,
 					headers: {
 						'User-Agent': 'Sentient-Agent',
@@ -138,7 +138,7 @@ describe('sentient.js wrapper library', () => {
 					timeout: 10000,
 					json: true,
 				}
-				expect(makeRequest('localhost:9980', { url: '/test', qs: testparams })).to.contain.keys(expectedOpts)
+				expect(makeRequest('localhost:9910', { url: '/test', qs: testparams })).to.contain.keys(expectedOpts)
 			})
 		})
 		describe('launch', () => {
@@ -149,8 +149,8 @@ describe('sentient.js wrapper library', () => {
 			})
 			it('starts sentientd with sane defaults if no flags are passed', () => {
 				const expectedFlags = [
-					'--api-addr=localhost:9980',
-					'--rpc-addr=:9981',
+					'--api-addr=localhost:9910',
+					'--rpc-addr=:9911',
 				]
 				launch('testpath')
 				expect(mock['child_process'].spawn.called).to.be.true
