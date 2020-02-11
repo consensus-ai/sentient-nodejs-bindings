@@ -4,13 +4,13 @@
   "description": "Node wrapper for the sentient-network API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/consensus-ai/nodejs-sentient.git"
+    "url": "git+https://github.com/consensus-ai/sentient-nodejs-bindings.git"
   },
   "main": "lib/sentient.js",
   "scripts": {
     "build": "babel -d lib/ src/",
     "test": "npm run lint && mocha --compilers js:babel-register --recursive ./test",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "lint": "eslint --max-warnings 0 ./src ./test",
     "clean": "rm -rf node_modules"
   },
@@ -22,7 +22,7 @@
     "Cryptocurrency"
   ],
   "bugs": {
-    "url": "https://github.com/consensus-ai/nodejs-sentient/issues"
+    "url": "https://github.com/consensus-ai/sentient-nodejs-bindings/issues"
   },
   "author": "Consensus AI",
   "license": "MIT",
@@ -37,14 +37,17 @@
     "babel-runtime": "^6.18.0",
     "chai": "^4.1.2",
     "eslint": "4.7.2",
-    "mocha": "^3.5.3",
+    "mocha": "^5.2.0",
     "nock": "^9.0.18",
     "proxyquire": "^1.7.10",
     "readdir": "0.0.13",
-    "sinon": "^3.3.0"
+    "sinon": "^7.2.2"
   },
   "dependencies": {
+    "@sinonjs/commons": "^1.3.0",
+    "@sinonjs/formatio": "^3.1.0",
+    "@sinonjs/samsam": "^3.0.2",
     "bignumber.js": "^4.0.4",
-    "request": "^2.81.0"
+    "request": "^2.88.0"
   }
 }
